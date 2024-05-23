@@ -1,10 +1,26 @@
 [package]
-name = "task_manager"
+name = "TaskManager"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "task_api"
+path = "src/lib.rs"
+
 [dependencies]
-diesel = { version = "2.1.6", features = ["sqlite"] }
+diesel = { version = "2.1.6", features = ["sqlite", "r2d2"] }
 dotenv = "0.15.0"
+actix-web = "4.6.0"
+paperclip = {version = "0.8.2", features = ["actix4"]}
+env_logger = "0.11.3"
+http = "1.1.0"
+libsqlite3-sys = { version = "0.28.0", features = ["bundled"] }
+async-trait = "0.1.80"
+mockall = "0.12.1"
+derive_more = "0.99.17"
+serde = { version = "1.0.202", features = ["derive"] }
+thiserror = "1.0.61"
+r2d2 = "0.8.10"
+r2d2_sqlite = "0.24.0"
