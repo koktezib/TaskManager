@@ -1,11 +1,11 @@
 use crate::domain::error::ApiError;
 use std::error::Error;
 
-pub struct ErrorHandlingUtils {}
+pub struct ErrorHandlingHelper {}
 
-impl ErrorHandlingUtils {
+impl ErrorHandlingHelper {
     pub fn application_error(error_message: &str, error: Option<Box<dyn Error>>) -> ApiError {
-        ErrorHandlingUtils::log_error(error_message, &error);
+        ErrorHandlingHelper::log_error(error_message, &error);
         ApiError {
             code: 400,
             message: String::from(error_message),
@@ -14,7 +14,7 @@ impl ErrorHandlingUtils {
     }
     pub fn unauthorized_error() -> ApiError {
         let unauthorized_message = "Error: not authenticated or token expired";
-        ErrorHandlingUtils::log_error(unauthorized_message, &None);
+        ErrorHandlingHelper::log_error(unauthorized_message, &None);
         ApiError {
             code: 401,
             message: String::from(unauthorized_message),
@@ -23,7 +23,7 @@ impl ErrorHandlingUtils {
     }
     pub fn forbidden_error() -> ApiError {
         let forbdden_message = "Error: resource not allowed";
-        ErrorHandlingUtils::log_error(forbdden_message, &None);
+        ErrorHandlingHelper::log_error(forbdden_message, &None);
         ApiError {
             code: 403,
             message: String::from(forbdden_message),

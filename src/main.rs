@@ -1,4 +1,3 @@
-use std::env;
 use std::net::TcpListener;
 
 use task_api::run;

@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone,Serialize,Deserialize)]
+use utoipa::ToSchema;
+
+#[derive(Debug, Clone,Serialize,Deserialize, ToSchema)]
 pub struct Task
 {
     pub id: i32,

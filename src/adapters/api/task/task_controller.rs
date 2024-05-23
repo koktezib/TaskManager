@@ -19,6 +19,12 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     cfg.service(delete_task);
 
 }
+#[utoipa::path(
+context_path = "/api",
+responses(
+(status = 200, description = "List all tasks", body = [Task])
+)
+)]
 #[get("/tasks")]
 async fn get_tasks(data: web::Data<AppConfigs>) -> Result<HttpResponse, ErrorReponse> {
     let get_all_tasks_request = GetAllTasksRequest::new(&data.task_repository);
@@ -30,6 +36,15 @@ async fn get_tasks(data: web::Data<AppConfigs>) -> Result<HttpResponse, ErrorRep
 
 }
 
+#[utoipa::path(
+context_path = "/api",
+responses(
+(status = 200, description = "Get task by ID", body = Task)
+),
+params(
+("id" = i32, Path, description = "Task ID")
+)
+)]
 #[get("/tasks/{id}")]
 async fn get_task(data: web::Data<AppConfigs>, task_id: web::Path<i32>) -> Result<HttpResponse, ErrorReponse> {
     let task_id = task_id.into_inner();
@@ -40,7 +55,13 @@ async fn get_task(data: web::Data<AppConfigs>, task_id: web::Path<i32>) -> Resul
         .map_err(ErrorReponse::map_io_error)
         .map(|task| HttpResponse::Ok().json(task))
 }
-
+#[utoipa::path(
+context_path = "/api",
+request_body = TaskPayload,
+responses(
+(status = 200, description = "Create a new task", body = Task)
+)
+)]
 #[post("/tasks")]
 async fn create_task(data: web::Data<AppConfigs>, input: web::Json<TaskPayload>) -> Result<HttpResponse, ErrorReponse> {
     let TaskPayload { title, description } = input.into_inner();
@@ -55,7 +76,16 @@ async fn create_task(data: web::Data<AppConfigs>, input: web::Json<TaskPayload>)
     }
 }
 
-
+#[utoipa::path(
+context_path = "/api",
+request_body = TaskPayload,
+responses(
+(status = 200, description = "Update a task", body = Task)
+),
+params(
+("id" = i32, Path, description = "Task ID")
+)
+)]
 #[put("/tasks/{id}")]
 async fn update_task(data: web::Data<AppConfigs>, task_id: web::Path<i32>, input: web::Json<TaskPayload>) -> Result<HttpResponse, ErrorReponse> {
     let TaskPayload { title, description } = input.into_inner();
@@ -69,7 +99,15 @@ async fn update_task(data: web::Data<AppConfigs>, task_id: web::Path<i32>, input
         Err(err) => Err(ErrorReponse::map_io_error(err)),
     }
 }
-
+#[utoipa::path(
+context_path = "/api",
+responses(
+(status = 200, description = "Delete a task")
+),
+params(
+("id" = i32, Path, description = "Task ID")
+)
+)]
 #[delete("/tasks/{id}")]
 async fn delete_task(data: web::Data<AppConfigs>, task_id: web::Path<i32>) -> Result<HttpResponse, ErrorReponse> {
     let delete_task_request = DeleteTaskRequest::new(task_id.into_inner(), &data.task_repository);

@@ -1,10 +1,9 @@
 use async_trait::async_trait;
-use crate::dal::models::TaskEntity;
+use crate::domain::task::task::Task;
 
 #[cfg(test)]
 use mockall::{predicate::*, *};
 use std::error::Error;
-use crate::domain::task::task::Task;
 
 #[cfg_attr(test, automock)]
 #[async_trait(?Send)]
