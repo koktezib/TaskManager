@@ -8,6 +8,13 @@ type DbPool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
 pub struct DbConnection {
     pub db_name: String,
 }
+/// Создаёт и возвращает пул соединений к базе данных.
+///
+/// # Возвращаемое значение
+/// Возвращает `DbPool` - пул соединений, сконфигурированный с максимальным размером и соединением к базе данных.
+///
+/// # Паника
+/// Функция паникует, если переменная окружения `DATABASE_URL` не установлена или если пул соединений не может быть создан.
 
 impl DbConnection {
     pub fn get_pool(&self) -> DbPool {

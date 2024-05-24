@@ -9,7 +9,7 @@ use crate::dal::db_mapper::TaskDbMapper;
 use crate::dal::models::{TaskEntity};
 use crate::domain::task::task::Task;
 use crate::dal::schema::tasks::dsl::*;
-
+/// Структура `TaskRepository` предназначена для взаимодействия с базой данных для управления задачами.
 pub struct TaskRepository {
     pub db_connection: DbConnection,
 }
@@ -18,6 +18,11 @@ pub struct TaskRepository {
 impl TaskRepositoryAbstract for TaskRepository {
 
 
+    /// Получает все задачи из базы данных.
+    ///
+    /// # Возвращает
+    /// - `Ok(Vec<Task>)` если задачи успешно получены.
+    /// - `Err(Box<dyn Error>)` если произошла ошибка при выполнении запроса.
     async fn get_all_tasks(&self) -> Result<Vec<Task>, Box<dyn Error>> {
         let mut conn = self.db_connection.get_pool().get().expect("couldn't get db connection from pool");
 
@@ -28,7 +33,14 @@ impl TaskRepositoryAbstract for TaskRepository {
         Err(e) => Err(Box::new(e)),
         }
     }
-
+    /// Удаляет задачу по её идентификатору.
+    ///
+    /// # Аргументы
+    /// - `task_id` - Идентификатор задачи, которую нужно удалить.
+    ///
+    /// # Возвращает
+    /// - `Ok(())` если задача успешно удалена.
+    /// - `Err(Box<dyn Error>)` если задача не найдена или произошла ошибка при выполнении запроса.
     async fn delete_task(&self, task_id: i32) -> Result<(), Box<dyn Error>> {
         let mut conn = self.db_connection.get_pool().get().map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
@@ -46,7 +58,14 @@ impl TaskRepositoryAbstract for TaskRepository {
             Err(e) => Err(Box::new(e)),
         }
     }
-
+    /// Получает задачу по её идентификатору.
+    ///
+    /// # Аргументы
+    /// - `task_id` - Идентификатор задачи, которую нужно получить.
+    ///
+    /// # Возвращает
+    /// - `Ok(Task)` если задача успешно найдена.
+    /// - `Err(Box<dyn Error>)` если задача не найдена или произошла ошибка при выполнении запроса.
     async fn get_task_by_id(&self, task_id: i32) -> Result<Task, Box<dyn Error>> {
         let mut  conn = self.db_connection.get_pool().get().expect("couldn't get db connection from pool");
 
@@ -58,7 +77,15 @@ impl TaskRepositoryAbstract for TaskRepository {
         }
 
     }
-
+    /// Создаёт новую задачу.
+    ///
+    /// # Аргументы
+    /// - `new_title` - Заголовок новой задачи.
+    /// - `new_description` - Описание новой задачи (необязательно).
+    ///
+    /// # Возвращает
+    /// - `Ok(Task)` если задача успешно создана.
+    /// - `Err(Box<dyn Error>)` если произошла ошибка при выполнении запроса.
     async fn create_task(&self, new_title: String, new_description: Option<String>) -> Result<Task, Box<dyn Error>> {
         let mut conn = self.db_connection.get_pool().get().map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
@@ -77,7 +104,16 @@ impl TaskRepositoryAbstract for TaskRepository {
             Err(e) => Err(Box::new(e)),
         }
     }
-
+    /// Обновляет существующую задачу.
+    ///
+    /// # Аргументы
+    /// - `task_id` - Идентификатор задачи, которую нужно обновить.
+    /// - `new_title` - Новый заголовок задачи.
+    /// - `new_description` - Новое описание задачи (необязательно).
+    ///
+    /// # Возвращает
+    /// - `Ok(Task)` если задача успешно обновлена.
+    /// - `Err(Box<dyn Error>)` если произошла ошибка при выполнении запроса.
     async fn update_task(&self, task_id: i32, new_title: String, new_description: Option<String>) -> Result<Task, Box<dyn Error>> {
         let mut conn = self.db_connection.get_pool().get().map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
@@ -99,17 +135,4 @@ impl TaskRepositoryAbstract for TaskRepository {
             Err(e) => Err(Box::new(e)),
         }
     }
-    /*
-
-
-        async fn update_task(&self, task_id: i32, title: Option<String>, description: Option<String>) -> Result<Task, String> {
-            Err("fe".to_string())
-
-        }
-
-        async fn delete_task(&self, task_id: i32) -> Result<(), String> {
-            Err("fe".to_string())
-        }
-
-     */
 }

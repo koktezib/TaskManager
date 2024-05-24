@@ -19,6 +19,7 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
     cfg.service(delete_task);
 
 }
+
 #[utoipa::path(
 context_path = "/api",
 responses(
@@ -55,6 +56,7 @@ async fn get_task(data: web::Data<AppConfigs>, task_id: web::Path<i32>) -> Resul
         .map_err(ErrorReponse::map_io_error)
         .map(|task| HttpResponse::Ok().json(task))
 }
+
 #[utoipa::path(
 context_path = "/api",
 request_body = TaskPayload,

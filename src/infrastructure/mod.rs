@@ -21,7 +21,21 @@ delete_task,
 ),
 components(schemas(TaskPayload,Task))
 )]
-struct ApiDoc;pub fn server(listener: TcpListener, db_name: &str) -> Result<Server, std::io::Error> {
+
+
+struct ApiDoc;
+/// Инициализирует и запускает HTTP сервер на основе переданного слушателя сокетов.
+///
+/// # Параметры
+/// - `listener`: Слушатель для входящих соединений.
+/// - `db_name`: Имя базы данных для инициализации соединения.
+///
+/// # Возвращаемое значение
+/// Возвращает экземпляр `Server`, который может быть запущен асинхронно.
+///
+/// # Ошибки
+/// Возвращает `std::io::Error`, если сервер не может быть запущен.
+pub fn server(listener: TcpListener, db_name: &str) -> Result<Server, std::io::Error> {
     env::set_var("RUST_BACKTRACE", "1");
     env::set_var("RUST_LOG", "actix_web=debug");
     env::set_var("RUST_LOG", "diesel=debug,r2d2=debug");
